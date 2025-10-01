@@ -23,6 +23,11 @@ public class BookController {
         return "dashboard";
     }
 
+    @GetMapping("/addBook")
+    public String addBooks() {
+        return "addBook";
+    }
+
     @GetMapping("/books")
     public String getBooks(Model model) {
         String apiUrl = "http://localhost:8081/api/books";
@@ -48,6 +53,7 @@ public class BookController {
                           @RequestParam String bookAuthor,
                           @RequestParam int quantity,
                           Model model, RedirectAttributes redirectAttributes) {
+        System.out.println("I am in add book method");
 
         // Validate quantity
         if (quantity <= 0) {
@@ -61,37 +67,32 @@ public class BookController {
         newBook.put("bookAuthor", bookAuthor);
         newBook.put("quantity", quantity);
 
-        String apiMessage = "";
+        // Post to backend API
+        ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
+                "http://localhost:8081/api/books/add",
+                newBook,
+                Map.class
+        );
+        System.out.println("I am after response entity");
 
-        try {
-            // Post to backend API
-            ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
-                    "http://localhost:8081/api/books/add",
-                    newBook,
-                    Map.class
-            );
+        Map response = responseEntity.getBody();
+        System.out.println("I am after response body");
 
-            Map response = responseEntity.getBody();
-
-            if (response != null && response.containsKey("message")) {
-                apiMessage = response.get("message").toString(); // get message from API
-            } else {
-                apiMessage = "Book added successfully!";
-            }
-
-        } catch (Exception e) {
-            // If backend returns 400 or any error
-            if (e instanceof org.springframework.web.client.HttpClientErrorException.BadRequest) {
-                String responseBody = ((org.springframework.web.client.HttpClientErrorException.BadRequest) e).getResponseBodyAsString();
-                // You can parse JSON message if needed
-                apiMessage = responseBody; // raw JSON message, or parse to get "message"
-            } else {
-                apiMessage = "Failed to add book. Check backend API.";
-            }
+        String apiMessage;
+        if (response != null && response.containsKey("message")) {
+            apiMessage = response.get("message").toString();
+            System.out.println("I am after response message");
+        } else {
+            apiMessage = "Book added successfully!";
+            System.out.println("I am after response message");
         }
+        System.out.println("Response from API: " + response);
 
         redirectAttributes.addFlashAttribute("apiMessage", apiMessage);
 
+        if (response != null && response.containsKey("success") && !(Boolean) response.get("success")) {
+            return "redirect:/addBook";
+        }
         return "redirect:/books";
     }
 
@@ -109,6 +110,3 @@ public class BookController {
         return "redirect:/books";
     }
 }
-
-
-

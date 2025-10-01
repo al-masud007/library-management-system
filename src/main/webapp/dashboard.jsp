@@ -5,90 +5,83 @@
   Time: 5:20 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<h2 style="text-align: center; margin-top: 30px;">Register New Book</h2>
-<c:if test="${not empty apiMessage}">
-    <p style="text-align:center;
-            color: ${apiMessage.contains('invalid') ? 'red' : 'green'};
-            font-weight:bold;
-            margin-bottom: 20px;">
-            ${apiMessage}
-    </p>
-</c:if>
+<head>
+    <title>Library Management System - Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .welcome-text {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .nav-button {
+            background-color: #3498db;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-button:hover {
+            background-color: #2980b9;
+        }
+        .add-book-btn {
+            background-color: #27ae60;
+        }
+        .add-book-btn:hover {
+            background-color: #229954;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Welcome to Library Management System</h1>
 
+        <div class="welcome-text">
+            <p>Your digital gateway to managing books, tracking inventory, and organizing your library efficiently.</p>
+            <p>Whether you're adding new books to your collection or browsing through existing titles,
+               our system makes library management simple and intuitive.</p>
+            <p>Get started by choosing one of the options below:</p>
+        </div>
 
-<form action="${pageContext.request.contextPath}/add" method="post" class="book-form">
-    <div class="form-group">
-        <label for="bookName">Book Name:</label>
-        <input type="text" id="bookName" name="bookName" placeholder="Enter book name" required>
+        <div class="navigation-buttons">
+            <a href="/books" class="nav-button">
+                📖 View Book List
+            </a>
+            <a href="/addBook" class="nav-button add-book-btn">
+                ➕ Add New Book
+            </a>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label for="bookAuthor">Author:</label>
-        <input type="text" id="bookAuthor" name="bookAuthor" placeholder="Enter author name" required>
-    </div>
-
-    <div class="form-group">
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
-    </div>
-
-    <button type="submit" class="submit-btn">Add Book</button>
-</form>
-
-<style>
-    .book-form {
-        width: 400px;
-        margin: 20px auto;
-        padding: 25px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        background-color: #f9f9f9;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    .book-form .form-group {
-        margin-bottom: 15px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .book-form label {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .book-form input {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 14px;
-        transition: border-color 0.3s;
-    }
-
-    .book-form input:focus {
-        border-color: #007bff;
-        outline: none;
-    }
-
-    .book-form .submit-btn {
-        width: 100%;
-        padding: 12px;
-        background-color: #007bff;
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .book-form .submit-btn:hover {
-        background-color: #0056b3;
-    }
-</style>
+</body>
 </html>
