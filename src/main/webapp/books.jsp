@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -36,11 +35,33 @@
         .return-btn:hover {
             background-color: #e0a800;
         }
+        .message {
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
+            width: 80%;
+            text-align: center;
+            font-weight: bold;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
 
 <h2>Book List</h2>
+
+<c:if test="${not empty apiMessage}">
+    <div class="message ${apiMessage.contains('Error') ? 'error' : ''}">
+        ${apiMessage}
+    </div>
+</c:if>
 
 <table>
     <thead>

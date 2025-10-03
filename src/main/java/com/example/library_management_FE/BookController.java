@@ -97,16 +97,44 @@ public class BookController {
     }
 
     @PostMapping("/borrow/{id}")
-    public String borrowBook(@PathVariable Long id, Model model) {
+    public String borrowBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.postForEntity("http://localhost:8081/api/books/" + id + "/borrow", null, Map.class);
+        ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
+                "http://localhost:8081/api/books/" + id + "/borrow",
+                null,
+                Map.class
+        );
+
+        Map response = responseEntity.getBody();
+        String apiMessage;
+        if (response != null && response.containsKey("message")) {
+            apiMessage = response.get("message").toString();
+        } else {
+            apiMessage = "Book borrowed successfully!";
+        }
+        redirectAttributes.addFlashAttribute("apiMessage", apiMessage);
+
         return "redirect:/books";
     }
 
     @PostMapping("/return/{id}")
-    public String returnBook(@PathVariable Long id, Model model) {
+    public String returnBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.postForEntity("http://localhost:8081/api/books/" + id + "/return", null, Map.class);
+        ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
+                "http://localhost:8081/api/books/" + id + "/return",
+                null,
+                Map.class
+        );
+
+        Map response = responseEntity.getBody();
+        String apiMessage;
+        if (response != null && response.containsKey("message")) {
+            apiMessage = response.get("message").toString();
+        } else {
+            apiMessage = "Book returned successfully!";
+        }
+        redirectAttributes.addFlashAttribute("apiMessage", apiMessage);
+
         return "redirect:/books";
     }
 }

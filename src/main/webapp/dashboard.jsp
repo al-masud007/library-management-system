@@ -65,7 +65,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>📚 Welcome to Library Management System</h1>
+        <h1>Welcome to Library Management System</h1>
 
         <div class="welcome-text">
             <p>Your digital gateway to managing books, tracking inventory, and organizing your library efficiently.</p>
@@ -75,11 +75,10 @@
         </div>
 
         <div class="navigation-buttons">
-            <a href="/books" class="nav-button">
-                📖 View Book List
+            <a href="/books" class="nav-button">View Book List
             </a>
             <a href="/addBook" class="nav-button add-book-btn">
-                ➕ Add New Book
+                 Add New Book
             </a>
         </div>
     </div>
