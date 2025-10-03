@@ -18,7 +18,21 @@ import java.util.Map;
 @Controller
 public class BookController {
     @GetMapping("/")
-    public String dashboard() {
+    public String dashboard(Model model) {
+        String apiUrl = "http://localhost:8081/api/books";
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+        );
+
+        List<Map<String, Object>> books = response.getBody();
+        int totalBooks = books != null ? books.size() : 0;
+        model.addAttribute("totalBooks", totalBooks);
+
         return "dashboard";
     }
 
