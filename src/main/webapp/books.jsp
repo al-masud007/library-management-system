@@ -51,12 +51,59 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+        .nav-links {
+            text-align: center;
+            margin: 20px auto;
+            width: 80%;
+        }
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+        .nav-btn.dashboard {
+            background-color: #6c757d;
+        }
+        .nav-btn.dashboard:hover {
+            background-color: #545b62;
+        }
+        .nav-btn.add-book {
+            background-color: #28a745;
+        }
+        .nav-btn.add-book:hover {
+            background-color: #218838;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .nav-container {
+            text-align: center;
+            margin: 20px auto;
+            width: 80%;
+        }
     </style>
 </head>
 <body>
 
 <h2>Book List</h2>
 
+<!-- Display API response message -->
 <c:if test="${not empty apiMessage}">
     <div class="message ${apiMessage.contains('Error') ? 'error' : ''}">
         ${apiMessage}
@@ -104,6 +151,11 @@
     </c:choose>
     </tbody>
 </table>
+
+<div class="nav-container">
+    <a href="${pageContext.request.contextPath}/" class="back-link">← Back to Dashboard</a>
+    <a href="${pageContext.request.contextPath}/addBook" class="back-link" style="margin-left: 20px;">📚 Add New Book</a>
+</div>
 
 </body>
 </html>
