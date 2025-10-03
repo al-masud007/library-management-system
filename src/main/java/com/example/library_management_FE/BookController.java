@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,13 +51,13 @@ public class BookController {
     public String addBook(@RequestParam String bookName,
                           @RequestParam String bookAuthor,
                           @RequestParam int quantity,
-                          Model model, RedirectAttributes redirectAttributes) {
+                          Model model) {
         System.out.println("I am in add book method");
 
         // Validate quantity
         if (quantity <= 0) {
-            redirectAttributes.addFlashAttribute("apiMessage", "Quantity must be greater than 0.");
-            return "redirect:/";
+            model.addAttribute("apiMessage", "Quantity must be greater than 0.");
+            return "addBook";
         }
 
         RestTemplate restTemplate = new RestTemplate();
@@ -88,16 +87,28 @@ public class BookController {
         }
         System.out.println("Response from API: " + response);
 
-        redirectAttributes.addFlashAttribute("apiMessage", apiMessage);
+        model.addAttribute("apiMessage", apiMessage);
 
         if (response != null && response.containsKey("success") && !(Boolean) response.get("success")) {
-            return "redirect:/addBook";
+            return "addBook";
         }
-        return "redirect:/books";
+
+        // Fetch books to display updated list
+        String apiUrl = "http://localhost:8081/api/books";
+        ResponseEntity<List<Map<String, Object>>> booksResponse = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+        );
+        List<Map<String, Object>> books = booksResponse.getBody();
+        model.addAttribute("books", books);
+
+        return "books";
     }
 
     @PostMapping("/borrow/{id}")
-    public String borrowBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String borrowBook(@PathVariable Long id, Model model) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
                 "http://localhost:8081/api/books/" + id + "/borrow",
@@ -112,13 +123,24 @@ public class BookController {
         } else {
             apiMessage = "Book borrowed successfully!";
         }
-        redirectAttributes.addFlashAttribute("apiMessage", apiMessage);
+        model.addAttribute("apiMessage", apiMessage);
 
-        return "redirect:/books";
+        // Fetch books again to display updated list
+        String apiUrl = "http://localhost:8081/api/books";
+        ResponseEntity<List<Map<String, Object>>> booksResponse = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+        );
+        List<Map<String, Object>> books = booksResponse.getBody();
+        model.addAttribute("books", books);
+
+        return "books";
     }
 
     @PostMapping("/return/{id}")
-    public String returnBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String returnBook(@PathVariable Long id, Model model) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
                 "http://localhost:8081/api/books/" + id + "/return",
@@ -133,8 +155,19 @@ public class BookController {
         } else {
             apiMessage = "Book returned successfully!";
         }
-        redirectAttributes.addFlashAttribute("apiMessage", apiMessage);
+        model.addAttribute("apiMessage", apiMessage);
 
-        return "redirect:/books";
+        // Fetch books again to display updated list
+        String apiUrl = "http://localhost:8081/api/books";
+        ResponseEntity<List<Map<String, Object>>> booksResponse = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+        );
+        List<Map<String, Object>> books = booksResponse.getBody();
+        model.addAttribute("books", books);
+
+        return "books";
     }
 }

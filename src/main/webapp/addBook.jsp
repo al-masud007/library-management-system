@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>Add New Book - Library Management</title>
@@ -91,7 +92,6 @@
     <div class="container">
         <h1>📚 Add New Book</h1>
 
-        <!-- Display messages -->
         <c:if test="${not empty apiMessage}">
             <div class="message ${apiMessage.contains('successfully') ? 'success' : 'error'}">
                 ${apiMessage}
@@ -122,4 +122,3 @@
     </div>
 </body>
 </html>
-
